@@ -1,0 +1,56 @@
+html {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    max-width: 800px;
+}
+
+.ytp-divider {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid var(--ytp-border-soft);
+}
+
+.ytp-cookie-section {
+    margin-top: 4px;
+}
+
+.ytp-cookie-preview {
+    margin-top: 10px;
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid var(--ytp-border);
+    border-radius: 8px;
+    background: var(--ytp-surface-strong);
+}
+
+.ytp-cookie-preview.is-hidden,
+#cookie-status.is-hidden,
+#status-message.is-hidden {
+    visibility: hidden;
+    height: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    display: block !important;
+}
+
+.ytp-cookie-preview pre {
+    margin: 0;
+    padding: 10px;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--ytp-text);
+    overflow-x: auto;
+}
+
+#user_url {
+    word-break: break-all;
+    white-space: nowrap;
+    overflow-x: auto;
+}
