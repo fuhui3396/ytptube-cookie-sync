@@ -12,6 +12,27 @@
 
 原项目采用 MIT 许可证。
 
+## 新增功能：按网站自动选择预设
+
+### 功能说明
+
+浏览器处于某一网站时（如 youtube.com），点击扩展图标打开弹窗，**预设**和 **Cookie 预设**会自动选中与该网站对应的预设；在 bilibili.com 时则自动选中 bilibili 对应的预设，无需手动切换。
+
+### 匹配规则
+
+预设名称与当前页面域名关键字进行匹配，优先级从高到低：
+
+1. 预设名称与域名精确一致（如预设名 `youtube` ↔ `www.youtube.com`）
+2. 预设名称包含域名关键字（如预设名 `youtube-music` ↔ `youtube.com`）
+3. 域名关键字包含预设名称（如预设名 `yt` ↔ `youtube.com`）
+
+匹配时自动忽略常见子域前缀（`www`、`m`、`mobile` 等）。未匹配到任何预设时，保留用户上次手动选择的值。
+
+### 使用建议
+
+- 预设名称建议使用站点的域名关键字（如 `bilibili`、`youtube`、`twitter`），即可获得精确匹配
+- 如果在页面中改变了 URL，推断逻辑仅基于弹窗打开时的当前页面
+
 ## 新增功能：Cookie 同步
 
 ### 功能说明
@@ -54,7 +75,7 @@
 | `src/cookies.js` | **新增** Cookie 读取与 Netscape 格式转换模块 |
 | `src/background.js` | 添加 `sync-cookies-to-preset` 和 `get-cookies-for-url` 消息处理器 |
 | `src/popup.html` | 添加 Cookie 同步区域 UI |
-| `src/popup.js` | 添加 Cookie 预设渲染、同步和预览逻辑 |
+| `src/popup.js` | 添加 Cookie 预设渲染、同步和预览逻辑，以及按网站域名自动选择预设的 `inferPresetByUrl()` |
 | `src/css/popup.css` | 添加 Cookie 预览区域样式 |
 | `src/_locales/en/messages.json` | 添加英文翻译 |
 | `src/_locales/zh_CN/messages.json` | 添加中文翻译 |
