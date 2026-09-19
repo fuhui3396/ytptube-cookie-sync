@@ -93,6 +93,17 @@ addEventListener('DOMContentLoaded', async _ => {
     selectedCookiePreset = await getOption("cookiePreset", 'default')
     onlyCustomPresets = await getOption("onlyCustomPresets", false)
     await loadPresetCache(false)
+
+    const inferredPreset = inferPresetByUrl(url, presetItems)
+    if (inferredPreset) {
+        selectedPreset = inferredPreset
+        await chrome.storage.sync.set({ preset: inferredPreset })
+        if (presetItems.some(p => !p.default && p.name === inferredPreset)) {
+            selectedCookiePreset = inferredPreset
+            await chrome.storage.sync.set({ cookiePreset: inferredPreset })
+        }
+    }
+
     renderPresets()
     await renderCookiePresets()
 })
@@ -252,6 +263,40 @@ const appendPresetGroup = (select, label, presets) => {
         .forEach(preset => appendPreset(group, preset, null))
     select.appendChild(group)
 }
+
+const getDomainKeyword = (url) => {
+    const domain = YTPCookies.extractDomain(url);
+    if (!domain) return null;
+    const parts = domain.toLowerCase().split('.');
+    if (parts.length === 1) return parts[0];
+    const ignored = new Set(['www', 'm', 'mobile', 'mp', 'api', 'app', 'play', 'music', 'music-tv']);
+    let idx = 0;
+    while (idx < parts.length - 2 && ignored.has(parts[idx])) {
+        idx++;
+    }
+    return parts[idx] || parts[0];
+};
+
+const inferPresetByUrl = (url, presets) => {
+    const keyword = getDomainKeyword(url);
+    if (!keyword || !Array.isArray(presets) || presets.length === 0) return null;
+
+    const candidates = [];
+    for (const preset of presets) {
+        if (!preset || typeof preset.name !== 'string' || preset.default) continue;
+        const name = preset.name.toLowerCase();
+        if (name === keyword) {
+            candidates.push({ preset, score: 100 });
+        } else if (name.includes(keyword)) {
+            candidates.push({ preset, score: 60 - name.length });
+        } else if (keyword.includes(name)) {
+            candidates.push({ preset, score: 30 - name.length });
+        }
+    }
+    if (candidates.length === 0) return null;
+    candidates.sort((a, b) => b.score - a.score);
+    return candidates[0].preset.name;
+};
 
 // --- Cookie Sync ---
 
