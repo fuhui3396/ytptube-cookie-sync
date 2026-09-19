@@ -32,7 +32,7 @@ html.ytp-bg-fanart body { position: relative; z-index: 1; }
 body.ytp-shell.ytp-with-background { background: transparent; opacity: .95; }
 .ytp-shell-surface { background: radial-gradient(circle at top left, rgb(99 102 241 / .14), transparent 28%), radial-gradient(circle at top right, rgb(245 158 11 / .12), transparent 22%), linear-gradient(180deg, rgb(255 255 255 / .6), rgb(248 250 252 / .72)); backdrop-filter: blur(16px); }
 
-.ytp-popup-shell { width: min(800px, 100vw); min-height: 0; padding: 0; overflow-x: hidden; }
+.ytp-popup-shell { width: min(800px, 100vw); min-width: 700px; min-height: 0; padding: 0; overflow-x: hidden; }
 .ytp-popup-shell > .ytp-shell-surface { width: 100%; padding: 1em; }
 .ytp-options-shell { padding: 0; }
 .ytp-options-shell > main { max-width: 620px; margin: 0 auto; padding: 1em; }
