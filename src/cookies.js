@@ -81,15 +81,55 @@
     const getCookiesForDomain = async (domain) => {
         if (!domain) return [];
         try {
-            // Chrome's getAll({ domain }) only matches exact domain.
-            // Cookies set on ".bilibili.com" won't show up for "www.bilibili.com".
-            // So we get ALL cookies and filter manually.
-            const allCookies = await api.cookies.getAll({});
-            return (allCookies || []).filter(c => domainMatches(c.domain, domain));
+            // `domain` matches the exact domain and its subdomains, and avoids
+            // reading the browser's entire cookie store.
+            const cookies = await api.cookies.getAll({ domain });
+            return cookies || [];
         } catch (err) {
             console.error('Cookie fetch error:', err);
             return [];
         }
+    };
+
+    /**
+     * Get all cookies that apply to a specific URL.
+     * @param {string} url
+     * @returns {Promise<Array>}
+     */
+    const getCookiesForUrl = async (url) => {
+        if (!url) return [];
+        try {
+            return (await api.cookies.getAll({ url })) || [];
+        } catch (err) {
+            console.error('Cookie fetch error:', err);
+            return [];
+        }
+    };
+
+    /**
+     * Parse a Netscape HTTP Cookie File string into cookie-like objects.
+     * @param {string} text
+     * @returns {Array<{domain:string,flag:boolean,path:string,secure:boolean,expiration:number,name:string,value:string}>}
+     */
+    const parseNetscape = (text) => {
+        if (!text || typeof text !== 'string') return [];
+        const cookies = [];
+        for (const line of text.split('\n')) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) continue;
+            const parts = line.split('\t');
+            if (parts.length < 7) continue;
+            cookies.push({
+                domain: parts[0],
+                flag: parts[1].toUpperCase() === 'TRUE',
+                path: parts[2],
+                secure: parts[3].toUpperCase() === 'TRUE',
+                expiration: Number(parts[4]) || 0,
+                name: parts[5],
+                value: parts.slice(6).join('\t'),
+            });
+        }
+        return cookies;
     };
 
     /**
@@ -102,7 +142,7 @@
         if (!domain) {
             return { domain: null, cookies: [], netscape: '' };
         }
-        const cookies = await getCookiesForDomain(domain);
+        const cookies = await getCookiesForUrl(url);
         const netscape = toNetscapeFormat(cookies);
         return { domain, cookies, netscape };
     };
@@ -126,6 +166,8 @@
         toNetscapeFormat,
         extractDomain,
         getCookiesForDomain,
+        getCookiesForUrl,
+        parseNetscape,
         getFormattedCookies,
         isValidNetscape,
     };

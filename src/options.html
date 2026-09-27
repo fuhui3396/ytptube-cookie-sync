@@ -49,6 +49,47 @@
                 <span><strong data-i18n="show_context_menu">Show context menu</strong><small data-i18n="context_menu_help">Offer Send to YTPTube on supported links.</small></span>
             </label>
         </section>
+        <section class="ytp-section">
+            <h2 class="ytp-subheading" data-i18n="notifications_section">Notifications</h2>
+            <label class="ytp-check" for="notifyEnabled">
+                <input type="checkbox" id="notifyEnabled">
+                <span><strong data-i18n="enable_notifications">Enable notifications</strong></span>
+            </label>
+            <label class="ytp-check" for="notifyFinished">
+                <input type="checkbox" id="notifyFinished">
+                <span><strong data-i18n="notify_finished">Notify when a download finishes</strong></span>
+            </label>
+            <label class="ytp-check" for="notifyFailed">
+                <input type="checkbox" id="notifyFailed">
+                <span><strong data-i18n="notify_failed">Notify when a download fails</strong></span>
+            </label>
+        </section>
+        <section class="ytp-section">
+            <h2 class="ytp-subheading" data-i18n="auto_sync_section">Automatic cookie sync</h2>
+            <label class="ytp-check" for="autoSyncEnabled">
+                <input type="checkbox" id="autoSyncEnabled">
+                <span><strong data-i18n="enable_auto_sync">Enable automatic cookie sync</strong><small data-i18n="auto_sync_help">Syncs cookies for the configured sites automatically.</small></span>
+            </label>
+            <div class="ytp-field">
+                <label for="autoSyncInterval" data-i18n="auto_sync_interval">Sync interval (minutes)</label>
+                <input id="autoSyncInterval" class="ytp-control" type="number" min="5" step="5" value="360">
+            </div>
+            <div id="auto-sync-last" class="ytp-help"></div>
+            <ul id="auto-sync-list" class="ytp-auto-sync-list"></ul>
+            <div class="ytp-input-action">
+                <select id="auto-sync-preset" class="ytp-control"></select>
+                <input id="auto-sync-url" class="ytp-control" data-i18n-placeholder="auto_sync_url" placeholder="https://www.example.com">
+                <button id="auto-sync-add" class="ytp-button ytp-button-secondary" type="button" data-i18n="add">Add</button>
+            </div>
+        </section>
+        <section class="ytp-section">
+            <h2 class="ytp-subheading" data-i18n="presets_section">Presets</h2>
+            <ul id="preset-list" class="ytp-preset-list"></ul>
+            <div class="ytp-input-action">
+                <input id="new-preset-name" class="ytp-control" data-i18n-placeholder="new_preset_name" placeholder="new-preset-name">
+                <button id="create-preset" class="ytp-button ytp-button-secondary" type="button" data-i18n="create_preset">Create</button>
+            </div>
+        </section>
         <p id="error_msg" class="ytp-error"></p>
         <div class="ytp-actions">
             <button class="ytp-button ytp-button-primary" type="submit" data-i18n="save_options">Save options</button>
@@ -60,6 +101,7 @@
 <script src="i18n.js"></script>
 <script src="theme.js"></script>
 <script src="auth.js"></script>
+<script src="api.js"></script>
 <script src="fanart.js"></script>
 <script src="options.js"></script>
 </body>

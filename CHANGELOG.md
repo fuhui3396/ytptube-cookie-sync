@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.7.0 - 2026-09-27
+
+- **Added**: Browser notifications for finished and failed downloads, with retry support and a live toolbar badge.
+- **Added**: Automatic cookie sync to presets on a configurable interval.
+- **Added**: History page with search, status filters, pagination, archive, delete, and retry.
+- **Added**: Batch add, preset create/delete, and cookie export/import.
+- **Added**: Keyboard command to send the current tab to YTPTube.
+- **Changed**: Authentication is now stored in local storage and migrated from legacy sync storage.
+- **Changed**: Cookie collection now targets the specific URL and supports parsing Netscape cookie files.
+- **Improved**: Centralized YTPTube API access in a shared module.
+
 ## 1.5.2 - 2026-09-13
 
 - **Added**: Support for Firefox on Android 142 and newer.

@@ -24,15 +24,40 @@
     };
 
     const getAuth = async () => {
-        const stored = await browserApi.storage.sync.get(['auth', 'username', 'password']);
-        if (stored.auth) {
-            return stored.auth;
+        const local = await browserApi.storage.local.get('auth');
+        if (local.auth) {
+            return local.auth;
         }
-        if (stored.username && stored.password) {
-            return `${stored.username}:${stored.password}`;
+
+        // Migrate any legacy value previously kept in sync storage.
+        const legacy = await browserApi.storage.sync.get(['auth', 'username', 'password']);
+        let value = '';
+        if (legacy.auth) {
+            value = legacy.auth;
+        } else if (legacy.username && legacy.password) {
+            value = `${legacy.username}:${legacy.password}`;
         }
-        return '';
+
+        if (value) {
+            await browserApi.storage.local.set({ auth: value });
+            await browserApi.storage.sync.remove(['auth', 'username', 'password']);
+        }
+        return value;
     };
 
-    root.YTPAuth = { parse, getAuth };
+    const setAuth = async value => {
+        if (value) {
+            await browserApi.storage.local.set({ auth: value });
+        } else {
+            await browserApi.storage.local.remove('auth');
+        }
+        await browserApi.storage.sync.remove(['auth', 'username', 'password']);
+    };
+
+    const clearAuth = async () => {
+        await browserApi.storage.local.remove('auth');
+        await browserApi.storage.sync.remove(['auth', 'username', 'password']);
+    };
+
+    root.YTPAuth = { parse, getAuth, setAuth, clearAuth };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

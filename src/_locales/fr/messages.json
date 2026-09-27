@@ -59,6 +59,9 @@
   "send_to_ytptube": {
     "message": "Envoyer à YTPTube"
   },
+  "go_to_backend": {
+    "message": "Aller à la console"
+  },
   "options": {
     "message": "Options"
   },
@@ -199,5 +202,86 @@
   },
   "hide_auth": {
     "message": "Masquer la valeur d’authentification"
+  },
+  "download_status": {
+    "message": "Téléchargements en direct"
+  },
+  "failed_downloads": {
+    "message": "Téléchargements échoués"
+  },
+  "no_active_downloads": {
+    "message": "Aucun téléchargement actif."
+  },
+  "no_failed_downloads": {
+    "message": "Aucun téléchargement échoué."
+  },
+  "retry": {
+    "message": "Réessayer"
+  },
+  "retry_all": {
+    "message": "Tout réessayer"
+  },
+  "retry_success": {
+    "message": "Demande de nouvelle tentative envoyée."
+  },
+  "retry_failed": {
+    "message": "Échec de la nouvelle tentative."
+  },
+  "retry_nothing": {
+    "message": "Aucun téléchargement à réessayer n'a été trouvé."
+  },
+  "open_original": {
+    "message": "Ouvrir le lien d'origine"
+  },
+  "download_finished": {
+    "message": "Téléchargement terminé"
+  },
+  "download_failed": {
+    "message": "Échec du téléchargement"
+  },
+  "speed": {
+    "message": "Vitesse"
+  },
+  "eta": {
+    "message": "Temps restant"
+  },
+  "status_queued": {
+    "message": "En attente"
+  },
+  "status_downloading": {
+    "message": "Téléchargement"
+  },
+  "status_finished": {
+    "message": "Terminé"
+  },
+  "status_error": {
+    "message": "Erreur"
+  },
+  "status_paused": {
+    "message": "En pause"
+  },
+  "status_canceled": {
+    "message": "Annulé"
+  },
+  "status_cancelled": {
+    "message": "Annulé"
+  },
+  "status_started": {
+    "message": "Démarré"
+  },
+  "status_preparing": {
+    "message": "Préparation"
+  },
+  "status_postprocessing": {
+    "message": "Post-traitement"
+  },
+  "status_skip": {
+    "message": "Ignoré"
+  },
+  "backend_not_configured": {
+    "message": "Veuillez d'abord configurer l'URL du serveur YTPTube dans les options."
+  },
+  "backend_open_failed": {
+    "message": "Impossible d'ouvrir la page du backend."
   }
 }

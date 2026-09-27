@@ -2,7 +2,7 @@ html {
     margin: 0;
     padding: 0;
     min-width: 0;
-    max-width: 800px;
+    max-width: 533px;
 }
 
 .ytp-divider {
@@ -53,4 +53,189 @@ html {
     word-break: break-all;
     white-space: nowrap;
     overflow-x: auto;
+}
+
+.ytp-download-status {
+    margin-top: 16px;
+    border-top: 1px solid var(--ytp-border-soft);
+    padding-top: 12px;
+}
+
+.ytp-subheading {
+    margin: 12px 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ytp-muted);
+}
+
+.ytp-live-list,
+.ytp-failed-list {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ytp-live-item,
+.ytp-failed-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 6px 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--ytp-border);
+    border-radius: 8px;
+    background: var(--ytp-surface-strong);
+}
+
+.ytp-live-item > span:first-child,
+.ytp-failed-item > span:first-child {
+    grid-column: 1 / 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.ytp-failed-item {
+    grid-template-columns: 1fr auto auto;
+}
+
+.ytp-status-badge {
+    justify-self: end;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--ytp-primary);
+}
+
+.ytp-progress {
+    grid-column: 1 / -1;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--ytp-border-soft);
+    overflow: hidden;
+}
+
+.ytp-progress > div {
+    height: 100%;
+    width: 0;
+    background: var(--ytp-primary);
+    transition: width .3s ease;
+}
+
+.ytp-live-item small {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: var(--ytp-muted);
+}
+
+.ytp-failed-item .ytp-button {
+    padding: 4px 10px;
+    font-size: 11px;
+}
+
+#retry-all-failed {
+    margin-top: 4px;
+}
+
+.ytp-live-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.ytp-live-controls .ytp-button {
+    padding: 4px 10px;
+    font-size: 11px;
+}
+
+.ytp-batch {
+    margin: 10px 0;
+}
+
+.ytp-batch summary {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ytp-muted);
+}
+
+.ytp-batch textarea {
+    width: 100%;
+    margin-top: 6px;
+    resize: vertical;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 12px;
+}
+
+.ytp-failed-filter {
+    margin-bottom: 6px;
+}
+
+.ytp-failed-filter select {
+    width: auto;
+    min-width: 140px;
+}
+
+.ytp-history-toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.ytp-history-toolbar .ytp-control {
+    flex: 1;
+}
+
+.ytp-history-toolbar select {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+.ytp-history-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ytp-history-info strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.ytp-history-info small {
+    color: var(--ytp-muted);
+    font-size: 11px;
+}
+
+.ytp-history-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.ytp-history-actions .ytp-button {
+    padding: 4px 8px;
+    font-size: 11px;
+}
+
+.ytp-history-pager {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
 }

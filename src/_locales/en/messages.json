@@ -59,6 +59,9 @@
   "send_to_ytptube": {
     "message": "Send to YTPTube"
   },
+  "go_to_backend": {
+    "message": "Go to Backend"
+  },
   "options": {
     "message": "Options"
   },
@@ -247,5 +250,254 @@
   },
   "cookie_preview_failed": {
     "message": "Failed to preview cookies."
+  },
+  "download_status": {
+    "message": "Live downloads"
+  },
+  "failed_downloads": {
+    "message": "Failed downloads"
+  },
+  "no_active_downloads": {
+    "message": "No active downloads."
+  },
+  "no_failed_downloads": {
+    "message": "No failed downloads."
+  },
+  "retry": {
+    "message": "Retry"
+  },
+  "retry_all": {
+    "message": "Retry all"
+  },
+  "retry_success": {
+    "message": "Retry request sent."
+  },
+  "retry_failed": {
+    "message": "Failed to retry downloads."
+  },
+  "retry_nothing": {
+    "message": "No retryable downloads were found."
+  },
+  "open_original": {
+    "message": "Open original"
+  },
+  "download_finished": {
+    "message": "Download finished"
+  },
+  "download_failed": {
+    "message": "Download failed"
+  },
+  "speed": {
+    "message": "Speed"
+  },
+  "eta": {
+    "message": "ETA"
+  },
+  "status_queued": {
+    "message": "Queued"
+  },
+  "status_downloading": {
+    "message": "Downloading"
+  },
+  "status_finished": {
+    "message": "Finished"
+  },
+  "status_error": {
+    "message": "Error"
+  },
+  "status_paused": {
+    "message": "Paused"
+  },
+  "status_canceled": {
+    "message": "Canceled"
+  },
+  "status_cancelled": {
+    "message": "Cancelled"
+  },
+  "status_started": {
+    "message": "Started"
+  },
+  "status_preparing": {
+    "message": "Preparing"
+  },
+  "status_postprocessing": {
+    "message": "Post-processing"
+  },
+  "status_skip": {
+    "message": "Skipped"
+  },
+  "backend_not_configured": {
+    "message": "Please configure the YTPTube backend URL in the options first."
+  },
+  "backend_open_failed": {
+    "message": "Unable to open the backend page."
+  },
+  "command_send_current": {
+    "message": "Send current tab to YTPTube"
+  },
+  "batch_add": {
+    "message": "Batch add"
+  },
+  "batch_placeholder": {
+    "message": "One URL per line"
+  },
+  "send_batch": {
+    "message": "Send batch"
+  },
+  "batch_no_urls": {
+    "message": "No valid URLs found."
+  },
+  "batch_sent": {
+    "message": "Sent $1 URLs."
+  },
+  "history": {
+    "message": "History"
+  },
+  "history_title": {
+    "message": "History"
+  },
+  "copy_cookies": {
+    "message": "Copy"
+  },
+  "copied": {
+    "message": "Copied to clipboard."
+  },
+  "copy_failed": {
+    "message": "Failed to copy."
+  },
+  "pause": {
+    "message": "Pause"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "filter_all": {
+    "message": "All"
+  },
+  "filter_failed": {
+    "message": "Failed"
+  },
+  "filter_skipped": {
+    "message": "Skipped"
+  },
+  "filter_cancelled": {
+    "message": "Cancelled"
+  },
+  "search_placeholder": {
+    "message": "Search title or URL"
+  },
+  "no_history": {
+    "message": "No history entries."
+  },
+  "page_prev": {
+    "message": "Previous"
+  },
+  "page_next": {
+    "message": "Next"
+  },
+  "page_info": {
+    "message": "Page $1 / $2"
+  },
+  "archive": {
+    "message": "Archive"
+  },
+  "unarchive": {
+    "message": "Unarchive"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "confirm_delete": {
+    "message": "Are you sure you want to delete this item?"
+  },
+  "delete_success": {
+    "message": "Deleted."
+  },
+  "operation_failed": {
+    "message": "Operation failed."
+  },
+  "archived": {
+    "message": "Archived."
+  },
+  "unarchived": {
+    "message": "Removed from archive."
+  },
+  "notifications_section": {
+    "message": "Notifications"
+  },
+  "enable_notifications": {
+    "message": "Enable notifications"
+  },
+  "notify_finished": {
+    "message": "Notify when a download finishes"
+  },
+  "notify_failed": {
+    "message": "Notify when a download fails"
+  },
+  "auto_sync_section": {
+    "message": "Automatic cookie sync"
+  },
+  "enable_auto_sync": {
+    "message": "Enable automatic cookie sync"
+  },
+  "auto_sync_help": {
+    "message": "Syncs cookies for the configured sites automatically."
+  },
+  "auto_sync_interval": {
+    "message": "Sync interval (minutes)"
+  },
+  "auto_sync_last": {
+    "message": "Last sync"
+  },
+  "auto_sync_never": {
+    "message": "Never synced yet."
+  },
+  "auto_sync_summary": {
+    "message": "$1 succeeded, $2 failed, $3 skipped"
+  },
+  "auto_sync_skipped_permission": {
+    "message": "Skipped (no permission)"
+  },
+  "auto_sync_url": {
+    "message": "https://www.example.com"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "auto_sync_invalid": {
+    "message": "Select a preset and enter a valid URL."
+  },
+  "presets_section": {
+    "message": "Presets"
+  },
+  "new_preset_name": {
+    "message": "new-preset-name"
+  },
+  "create_preset": {
+    "message": "Create"
+  },
+  "preset_name_required": {
+    "message": "Preset name is required."
+  },
+  "preset_created": {
+    "message": "Preset created."
+  },
+  "preset_deleted": {
+    "message": "Preset deleted."
+  },
+  "preset_cookies_saved": {
+    "message": "Cookies saved."
+  },
+  "export": {
+    "message": "Export"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "cookies": {
+    "message": "Cookies"
   }
 }

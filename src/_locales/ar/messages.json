@@ -59,6 +59,9 @@
   "send_to_ytptube": {
     "message": "إرسال إلى YTPTube"
   },
+  "go_to_backend": {
+    "message": "انتقل إلى الواجهة الخلفية"
+  },
   "options": {
     "message": "الخيارات"
   },
@@ -199,5 +202,86 @@
   },
   "hide_auth": {
     "message": "إخفاء قيمة المصادقة"
+  },
+  "download_status": {
+    "message": "التنزيلات المباشرة"
+  },
+  "failed_downloads": {
+    "message": "التنزيلات الفاشلة"
+  },
+  "no_active_downloads": {
+    "message": "لا توجد تنزيلات نشطة."
+  },
+  "no_failed_downloads": {
+    "message": "لا توجد تنزيلات فاشلة."
+  },
+  "retry": {
+    "message": "إعادة المحاولة"
+  },
+  "retry_all": {
+    "message": "إعادة محاولة الكل"
+  },
+  "retry_success": {
+    "message": "تم إرسال طلب إعادة المحاولة."
+  },
+  "retry_failed": {
+    "message": "فشلت إعادة محاولة التنزيلات."
+  },
+  "retry_nothing": {
+    "message": "لم يتم العثور على تنزيلات قابلة لإعادة المحاولة."
+  },
+  "open_original": {
+    "message": "فتح الرابط الأصلي"
+  },
+  "download_finished": {
+    "message": "اكتمل التنزيل"
+  },
+  "download_failed": {
+    "message": "فشل التنزيل"
+  },
+  "speed": {
+    "message": "السرعة"
+  },
+  "eta": {
+    "message": "الوقت المتبقي"
+  },
+  "status_queued": {
+    "message": "في الانتظار"
+  },
+  "status_downloading": {
+    "message": "جارٍ التنزيل"
+  },
+  "status_finished": {
+    "message": "مكتمل"
+  },
+  "status_error": {
+    "message": "خطأ"
+  },
+  "status_paused": {
+    "message": "متوقف مؤقتًا"
+  },
+  "status_canceled": {
+    "message": "ملغى"
+  },
+  "status_cancelled": {
+    "message": "ملغى"
+  },
+  "status_started": {
+    "message": "بدأ"
+  },
+  "status_preparing": {
+    "message": "قيد التحضير"
+  },
+  "status_postprocessing": {
+    "message": "المعالجة اللاحقة"
+  },
+  "status_skip": {
+    "message": "تم التخطي"
+  },
+  "backend_not_configured": {
+    "message": "يرجى تكوين عنوان خادم YTPTube في الخيارات أولاً."
+  },
+  "backend_open_failed": {
+    "message": "تعذّر فتح صفحة الواجهة الخلفية."
   }
 }

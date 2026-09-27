@@ -39,8 +39,17 @@
             <input id="user_url" class="ytp-control" type="text" data-i18n-placeholder="url_placeholder" placeholder="https://..">
             <span class="ytp-help" data-i18n="url_help">The URL to add to your download queue.</span>
         </div>
+        <details class="ytp-batch">
+            <summary data-i18n="batch_add">Batch add</summary>
+            <textarea id="batch-urls" class="ytp-control" rows="4" data-i18n-placeholder="batch_placeholder" placeholder="One URL per line"></textarea>
+            <div class="ytp-actions">
+                <button id="send-batch-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="send_batch">Send batch</button>
+            </div>
+        </details>
         <div class="ytp-actions">
             <button id="submit-btn" class="ytp-button ytp-button-primary" type="submit" data-i18n="send_to_ytptube">Send to YTPTube</button>
+            <button class="ytp-button ytp-button-secondary" type="button" id="open-history" data-i18n="history">History</button>
+            <button class="ytp-button ytp-button-secondary" type="button" id="go-to-backend" data-i18n="go_to_backend">跳转到后台</button>
             <button class="ytp-button ytp-button-secondary" type="button" id="go-to-options" data-i18n="options">Options</button>
         </div>
         <div id="status-message" class="ytp-status is-hidden" role="status"></div>
@@ -60,21 +69,42 @@
             <div class="ytp-actions">
                 <button id="sync-cookies-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="sync_cookies">Sync Cookies</button>
                 <button id="preview-cookies-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="preview_cookies">Preview</button>
+                <button id="copy-cookies-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="copy_cookies">Copy</button>
             </div>
             <div id="cookie-preview" class="ytp-cookie-preview is-hidden">
                 <pre id="cookie-preview-content"></pre>
             </div>
-            <div id="cookie-status" class="ytp-status is-hidden" role="status"></div>
-        </section>
-    </form>
-</main>
+        <div id="cookie-status" class="ytp-status is-hidden" role="status"></div>
+      </section>
 
-<script src="i18n.js"></script>
-<script src="theme.js"></script>
-<script src="auth.js"></script>
-<script src="cookies.js"></script>
-<script src="fanart.js"></script>
-<script src="popup.js"></script>
+      <!-- 下载实时状态 -->
+      <section class="ytp-section ytp-download-status">
+        <h2 class="ytp-subheading" data-i18n="download_status">Download Status</h2>
+        <div id="no-active" class="ytp-status is-hidden" data-i18n="no_active_downloads"></div>
+        <ul id="live-queue" class="ytp-live-list"></ul>
+        <h2 class="ytp-subheading" data-i18n="failed_downloads">Failed Downloads</h2>
+        <div class="ytp-failed-filter">
+            <select id="failed-filter" class="ytp-control">
+                <option value="failed" data-i18n="filter_failed">Failed</option>
+                <option value="all" data-i18n="filter_all">All</option>
+                <option value="skip" data-i18n="filter_skipped">Skipped</option>
+                <option value="cancelled" data-i18n="filter_cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div id="no-failed" class="ytp-status is-hidden" data-i18n="no_failed_downloads"></div>
+        <ul id="failed-list" class="ytp-failed-list"></ul>
+        <button id="retry-all-failed" class="ytp-button ytp-button-secondary" type="button" data-i18n="retry_all">Retry all</button>
+      </section>
+    </form>
+  </main>
+
+  <script src="i18n.js"></script>
+  <script src="theme.js"></script>
+  <script src="auth.js"></script>
+  <script src="api.js"></script>
+  <script src="cookies.js"></script>
+  <script src="fanart.js"></script>
+  <script src="popup.js"></script>
 
 </body>
 </html>

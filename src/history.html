@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title data-i18n="history_title">History</title>
+    <link rel="stylesheet" href="css/ytp.css"/>
+    <link rel="stylesheet" href="css/popup.css"/>
+    <style>html { max-width: none; min-width: 0; }</style>
+</head>
+<body class="ytp-shell ytp-options-shell">
+
+<main class="ytp-shell-surface">
+    <header class="ytp-heading">
+        <span class="ytp-icon"><img src="icons/icon-48.png" alt=""></span>
+        <div>
+            <p class="ytp-kicker" data-i18n="options_kicker">YTPTube / Extension</p>
+            <h1 data-i18n="history_title">History</h1>
+        </div>
+        <button class="ytp-theme-toggle" type="button" id="theme-toggle" data-i18n="theme_button_system">Use dark mode</button>
+    </header>
+
+    <div class="ytp-history-toolbar">
+        <input id="history-search" class="ytp-control" type="search" data-i18n-placeholder="search_placeholder" placeholder="Search title or URL">
+        <select id="history-status" class="ytp-control">
+            <option value="" data-i18n="filter_all">All</option>
+            <option value="finished" data-i18n="status_finished">Finished</option>
+            <option value="!finished" data-i18n="filter_failed">Failed</option>
+            <option value="error" data-i18n="status_error">Error</option>
+            <option value="skip" data-i18n="status_skip">Skipped</option>
+            <option value="cancelled" data-i18n="status_cancelled">Cancelled</option>
+        </select>
+        <button id="history-refresh" class="ytp-button ytp-button-secondary" type="button" data-i18n="refresh">Refresh</button>
+    </div>
+
+    <div id="history-status-message" class="ytp-status is-hidden" role="status"></div>
+    <div id="history-empty" class="ytp-status is-hidden" data-i18n="no_history">No history entries.</div>
+    <ul id="history-list" class="ytp-failed-list"></ul>
+
+    <div class="ytp-history-pager">
+        <button id="history-prev" class="ytp-button ytp-button-secondary" type="button" data-i18n="page_prev">Previous</button>
+        <span id="history-page-info" class="ytp-help"></span>
+        <button id="history-next" class="ytp-button ytp-button-secondary" type="button" data-i18n="page_next">Next</button>
+    </div>
+</main>
+
+<script src="i18n.js"></script>
+<script src="theme.js"></script>
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script src="history.js"></script>
+</body>
+</html>

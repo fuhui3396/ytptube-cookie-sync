@@ -32,6 +32,20 @@
         }
     };
 
+    const CACHE_KEY = 'ytpBackgroundCache';
+
+    const blobToDataUrl = blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+
+    const applyBackground = value => {
+        backgroundUrl = value;
+        document.documentElement.style.setProperty('--ytp-bg-image', `url(${value})`);
+    };
+
     const load = async () => {
         if (backgroundUrl) {
             return true;
@@ -45,6 +59,15 @@
             if (!stored.instance_url) {
                 return false;
             }
+
+            // Reuse the image fetched earlier in this browser session.
+            try {
+                const cached = await browserApi.storage.session?.get(CACHE_KEY);
+                if (cached?.[CACHE_KEY]) {
+                    applyBackground(cached[CACHE_KEY]);
+                    return true;
+                }
+            } catch (_) { /* session storage unavailable */ }
 
             let auth;
             try {
@@ -70,8 +93,13 @@
                 }
 
                 const image = await resize(await response.blob());
-                backgroundUrl = URL.createObjectURL(image);
-                document.documentElement.style.setProperty('--ytp-bg-image', `url(${backgroundUrl})`);
+                applyBackground(URL.createObjectURL(image));
+
+                try {
+                    const dataUrl = await blobToDataUrl(image);
+                    await browserApi.storage.session?.set({ [CACHE_KEY]: dataUrl });
+                } catch (_) { /* caching is best-effort */ }
+
                 return true;
             } catch (error) {
                 console.error('Error fetching YTPTube background:', error);

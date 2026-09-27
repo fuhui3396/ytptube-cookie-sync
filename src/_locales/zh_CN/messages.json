@@ -59,6 +59,9 @@
   "send_to_ytptube": {
     "message": "发送到 YTPTube"
   },
+  "go_to_backend": {
+    "message": "跳转到后台"
+  },
   "options": {
     "message": "选项"
   },
@@ -247,5 +250,254 @@
   },
   "cookie_preview_failed": {
     "message": "预览 Cookie 失败。"
+  },
+  "download_status": {
+    "message": "实时下载"
+  },
+  "failed_downloads": {
+    "message": "失败的下载"
+  },
+  "no_active_downloads": {
+    "message": "暂无进行中的下载。"
+  },
+  "no_failed_downloads": {
+    "message": "暂无失败的下载。"
+  },
+  "retry": {
+    "message": "重试"
+  },
+  "retry_all": {
+    "message": "全部重试"
+  },
+  "retry_success": {
+    "message": "已发送重试请求。"
+  },
+  "retry_failed": {
+    "message": "重试下载失败。"
+  },
+  "retry_nothing": {
+    "message": "没有可重试的下载。"
+  },
+  "open_original": {
+    "message": "打开原链接"
+  },
+  "download_finished": {
+    "message": "下载完成"
+  },
+  "download_failed": {
+    "message": "下载失败"
+  },
+  "speed": {
+    "message": "速度"
+  },
+  "eta": {
+    "message": "剩余时间"
+  },
+  "status_queued": {
+    "message": "排队中"
+  },
+  "status_downloading": {
+    "message": "下载中"
+  },
+  "status_finished": {
+    "message": "已完成"
+  },
+  "status_error": {
+    "message": "错误"
+  },
+  "status_paused": {
+    "message": "已暂停"
+  },
+  "status_canceled": {
+    "message": "已取消"
+  },
+  "status_cancelled": {
+    "message": "已取消"
+  },
+  "status_started": {
+    "message": "已开始"
+  },
+  "status_preparing": {
+    "message": "准备中"
+  },
+  "status_postprocessing": {
+    "message": "后处理中"
+  },
+  "status_skip": {
+    "message": "已跳过"
+  },
+  "backend_not_configured": {
+    "message": "请先在选项中配置 YTPTube 后台地址。"
+  },
+  "backend_open_failed": {
+    "message": "无法打开后台页面。"
+  },
+  "command_send_current": {
+    "message": "将当前标签页发送到 YTPTube"
+  },
+  "batch_add": {
+    "message": "批量添加"
+  },
+  "batch_placeholder": {
+    "message": "每行一个 URL"
+  },
+  "send_batch": {
+    "message": "批量发送"
+  },
+  "batch_no_urls": {
+    "message": "未找到有效的 URL。"
+  },
+  "batch_sent": {
+    "message": "已发送 $1 个 URL。"
+  },
+  "history": {
+    "message": "历史记录"
+  },
+  "history_title": {
+    "message": "历史记录"
+  },
+  "copy_cookies": {
+    "message": "复制"
+  },
+  "copied": {
+    "message": "已复制到剪贴板。"
+  },
+  "copy_failed": {
+    "message": "复制失败。"
+  },
+  "pause": {
+    "message": "暂停"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "filter_all": {
+    "message": "全部"
+  },
+  "filter_failed": {
+    "message": "失败"
+  },
+  "filter_skipped": {
+    "message": "已跳过"
+  },
+  "filter_cancelled": {
+    "message": "已取消"
+  },
+  "search_placeholder": {
+    "message": "搜索标题或 URL"
+  },
+  "no_history": {
+    "message": "暂无历史记录。"
+  },
+  "page_prev": {
+    "message": "上一页"
+  },
+  "page_next": {
+    "message": "下一页"
+  },
+  "page_info": {
+    "message": "第 $1 / $2 页"
+  },
+  "archive": {
+    "message": "归档"
+  },
+  "unarchive": {
+    "message": "取消归档"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "confirm_delete": {
+    "message": "确定要删除此项吗？"
+  },
+  "delete_success": {
+    "message": "已删除。"
+  },
+  "operation_failed": {
+    "message": "操作失败。"
+  },
+  "archived": {
+    "message": "已归档。"
+  },
+  "unarchived": {
+    "message": "已取消归档。"
+  },
+  "notifications_section": {
+    "message": "通知"
+  },
+  "enable_notifications": {
+    "message": "启用通知"
+  },
+  "notify_finished": {
+    "message": "下载完成时通知"
+  },
+  "notify_failed": {
+    "message": "下载失败时通知"
+  },
+  "auto_sync_section": {
+    "message": "自动 Cookie 同步"
+  },
+  "enable_auto_sync": {
+    "message": "启用自动 Cookie 同步"
+  },
+  "auto_sync_help": {
+    "message": "自动为配置的站点同步 Cookie。"
+  },
+  "auto_sync_interval": {
+    "message": "同步间隔（分钟）"
+  },
+  "auto_sync_last": {
+    "message": "上次同步"
+  },
+  "auto_sync_never": {
+    "message": "尚未同步。"
+  },
+  "auto_sync_summary": {
+    "message": "成功 $1，失败 $2，跳过 $3"
+  },
+  "auto_sync_skipped_permission": {
+    "message": "跳过（无权限）"
+  },
+  "auto_sync_url": {
+    "message": "https://www.example.com"
+  },
+  "add": {
+    "message": "添加"
+  },
+  "auto_sync_invalid": {
+    "message": "请选择预设并输入有效的 URL。"
+  },
+  "presets_section": {
+    "message": "预设"
+  },
+  "new_preset_name": {
+    "message": "新预设名称"
+  },
+  "create_preset": {
+    "message": "创建"
+  },
+  "preset_name_required": {
+    "message": "预设名称不能为空。"
+  },
+  "preset_created": {
+    "message": "预设已创建。"
+  },
+  "preset_deleted": {
+    "message": "预设已删除。"
+  },
+  "preset_cookies_saved": {
+    "message": "Cookie 已保存。"
+  },
+  "export": {
+    "message": "导出"
+  },
+  "import": {
+    "message": "导入"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "cookies": {
+    "message": "Cookie"
   }
 }

@@ -59,6 +59,9 @@
   "send_to_ytptube": {
     "message": "YTPTube に送信"
   },
+  "go_to_backend": {
+    "message": "バックエンドへ移動"
+  },
   "options": {
     "message": "オプション"
   },
@@ -199,5 +202,86 @@
   },
   "hide_auth": {
     "message": "認証情報を非表示"
+  },
+  "download_status": {
+    "message": "リアルタイムダウンロード"
+  },
+  "failed_downloads": {
+    "message": "失敗したダウンロード"
+  },
+  "no_active_downloads": {
+    "message": "進行中のダウンロードはありません。"
+  },
+  "no_failed_downloads": {
+    "message": "失敗したダウンロードはありません。"
+  },
+  "retry": {
+    "message": "再試行"
+  },
+  "retry_all": {
+    "message": "すべて再試行"
+  },
+  "retry_success": {
+    "message": "再試行リクエストを送信しました。"
+  },
+  "retry_failed": {
+    "message": "ダウンロードの再試行に失敗しました。"
+  },
+  "retry_nothing": {
+    "message": "再試行可能なダウンロードがありません。"
+  },
+  "open_original": {
+    "message": "元のリンクを開く"
+  },
+  "download_finished": {
+    "message": "ダウンロード完了"
+  },
+  "download_failed": {
+    "message": "ダウンロード失敗"
+  },
+  "speed": {
+    "message": "速度"
+  },
+  "eta": {
+    "message": "残り時間"
+  },
+  "status_queued": {
+    "message": "待機中"
+  },
+  "status_downloading": {
+    "message": "ダウンロード中"
+  },
+  "status_finished": {
+    "message": "完了"
+  },
+  "status_error": {
+    "message": "エラー"
+  },
+  "status_paused": {
+    "message": "一時停止"
+  },
+  "status_canceled": {
+    "message": "キャンセル済み"
+  },
+  "status_cancelled": {
+    "message": "キャンセル済み"
+  },
+  "status_started": {
+    "message": "開始"
+  },
+  "status_preparing": {
+    "message": "準備中"
+  },
+  "status_postprocessing": {
+    "message": "後処理中"
+  },
+  "status_skip": {
+    "message": "スキップ"
+  },
+  "backend_not_configured": {
+    "message": "先にオプションで YTPTube のバックエンド URL を設定してください。"
+  },
+  "backend_open_failed": {
+    "message": "バックエンドページを開けませんでした。"
   }
 }
