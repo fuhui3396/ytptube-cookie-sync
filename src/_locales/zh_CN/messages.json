@@ -434,6 +434,12 @@
   "notify_failed": {
     "message": "下载失败时通知"
   },
+  "background_polling": {
+    "message": "后台轮询状态"
+  },
+  "background_polling_help": {
+    "message": "持续检查实例的下载完成或失败情况，并更新徽章数量。"
+  },
   "auto_sync_section": {
     "message": "自动 Cookie 同步"
   },
@@ -499,5 +505,23 @@
   },
   "cookies": {
     "message": "Cookie"
+  },
+  "rplay_detected": {
+    "message": "检测到 RPlay 视频流"
+  },
+  "rplay_use": {
+    "message": "使用该流"
+  },
+  "rplay_send": {
+    "message": "发送该流"
+  },
+  "rplay_sync_cookies": {
+    "message": "同步 RPlay Cookie"
+  },
+  "rplay_plugin_hint": {
+    "message": "推荐：在 YTPTube 安装 yt-dlp 的 rplay 提取器插件（可得到标题/简介/封面并生成 NFO）。未安装时请用“使用该流”。"
+  },
+  "rplay_drm_warning": {
+    "message": "该流受 DRM（Widevine）保护，YTPTube / yt-dlp 无法解密。"
   }
 }

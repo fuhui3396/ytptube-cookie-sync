@@ -60,7 +60,15 @@ $("#ytptube_popup").addEventListener("submit", async (e) => {
     showLoading(true)
 
     try {
-        const response = await chrome.runtime.sendMessage({ command: 'send-to-ytptube', url: url, preset: preset })
+        // RPlay 页面：优先用提取器插件（页面 URL + 清单）；若用户改用清单地址则退回 parse-metadata。
+        const rplayCli = (rplayPageUrl && url === rplayPageUrl) ? buildRplayExtractorCli()
+            : (rplayStreamUrl && url === rplayStreamUrl ? buildRplayCli() : '');
+        const response = await chrome.runtime.sendMessage({
+            command: 'send-to-ytptube',
+            url: url,
+            preset: preset,
+            ...(rplayCli ? { cli: rplayCli } : {}),
+        })
 
         if (response && response.success) {
             showStatusMessage(t('request_success'), true)
@@ -108,6 +116,8 @@ addEventListener('DOMContentLoaded', async _ => {
     await renderCookiePresets()
     // 启动实时状态更新（WebSocket，失败自动回退轮询）
     startLiveUpdates();
+    // RPlay 页面：展示嗅探到的真实流并支持一键发送/同步 Cookie
+    await initRplaySection(url);
 })
 
 $('#go-to-options').addEventListener('click', function () {
@@ -545,6 +555,115 @@ $('#copy-cookies-btn').addEventListener('click', async () => {
         showCookieStatus(t('copy_failed'), false)
     }
 })
+
+// ==================== RPlay 真实流 ====================
+let rplayStreamUrl = null;
+let rplayPageUrl = null;
+let rplayMeta = {};
+
+// generic 提取器只有清单地址，缺少标题/日期会让 NFOMakerPP 不生成 NFO。
+// 用 --parse-metadata 把页面元数据注入 yt-dlp 的 info_dict（经 YTPTube 的 cli 字段下发）。
+const buildRplayCli = () => {
+    const args = [];
+    const add = (value, field) => {
+        const text = String(value ?? '').trim();
+        if (!text) return;
+        const escaped = text
+            .replace(/\r?\n/g, ' ')
+            .replace(/"/g, '\\"')
+            .replace(/%/g, '%%')
+            .replace(/:/g, '\\:');
+        args.push(`--parse-metadata "${escaped}:%(${field})s"`);
+    };
+    add(rplayMeta.title, 'title');
+    add(rplayMeta.description, 'description');
+    add(rplayMeta.uploadDate, 'upload_date');
+    return args.join(' ');
+};
+
+// 首选：交给 rplay 提取器插件（页面 URL + 清单），可得到完整元数据与稳定 id。
+const buildRplayExtractorCli = () => {
+    if (!rplayStreamUrl) return '';
+    const encoded = encodeURIComponent(rplayStreamUrl);
+    const type = /\.mpd(?:$|\?)/i.test(rplayStreamUrl) ? 'dash' : 'hls';
+    return `--extractor-args "rplay:manifest=${encoded};type=${type}"`;
+};
+
+const showRplayStatus = (message, isSuccess = true) => {
+    const el = $('#rplay-status');
+    if (!el) return;
+    el.textContent = message;
+    el.className = `ytp-status ${isSuccess ? 'is-success' : 'is-danger'}`;
+    el.classList.remove('is-hidden');
+};
+
+const setRplaySendDisabled = disabled => {
+    ['#rplay-use-btn', '#rplay-send-btn'].forEach(sel => {
+        const btn = $(sel);
+        if (btn) btn.disabled = disabled;
+    });
+};
+
+const initRplaySection = async pageUrl => {
+    const section = $('#rplay-section');
+    if (!section || !pageUrl || !YTPRplay.isRPlayUrl(pageUrl)) return;
+
+    let stream;
+    try {
+        stream = await chrome.runtime.sendMessage({ command: 'get-rplay-stream', pageUrl });
+    } catch (error) {
+        console.error('RPlay stream lookup failed:', error);
+        return;
+    }
+    if (!stream?.found) return;
+
+    rplayStreamUrl = stream.url;
+    rplayPageUrl = pageUrl;
+    rplayMeta = stream.metadata || {};
+    section.classList.remove('is-hidden');
+    const label = rplayMeta.title ? `${rplayMeta.title} · ` : '';
+    $('#rplay-info').textContent = `${label}${(stream.type || '').toUpperCase()} · ${stream.url}`;
+
+    if (stream.drm) {
+        // yt-dlp 无法解密 Widevine，直接阻止发送并提示。
+        setRplaySendDisabled(true);
+        showRplayStatus(t('rplay_drm_warning'), false);
+    }
+
+    $('#rplay-use-btn')?.addEventListener('click', () => {
+        $('#user_url').value = rplayStreamUrl;
+    });
+
+    $('#rplay-send-btn')?.addEventListener('click', async () => {
+        const preset = $('#preset').value || 'default';
+        // 首选：发送页面 URL + 清单给 rplay 提取器插件（标题/简介/封面/日期齐全）。
+        const response = await chrome.runtime.sendMessage({
+            command: 'send-to-ytptube',
+            url: rplayPageUrl || rplayStreamUrl,
+            preset,
+            cli: buildRplayExtractorCli(),
+        }).catch(error => ({ success: false, message: error.message }));
+        showRplayStatus(response?.message || (response?.success ? t('request_success') : t('request_failed')), !!response?.success);
+    });
+
+    $('#rplay-sync-cookies-btn')?.addEventListener('click', async () => {
+        const presetName = $('#cookie-preset').value;
+        if (!presetName || presetName === 'default') {
+            showRplayStatus(t('cookie_select_custom_preset'), false);
+            return;
+        }
+        if (!await ensureOriginPermission(pageUrl)) {
+            showRplayStatus(t('permission_denied'), false);
+            return;
+        }
+        const response = await chrome.runtime.sendMessage({
+            command: 'sync-cookies-to-preset',
+            url: pageUrl,
+            presetName,
+        }).catch(error => ({ success: false, message: error.message }));
+        showRplayStatus(response?.message || (response?.success ? t('request_success') : t('cookie_sync_failed_generic')), !!response?.success);
+    });
+};
 
 // ==================== 实时状态：WebSocket + 轮询兜底 ====================
 let liveTimer = null;

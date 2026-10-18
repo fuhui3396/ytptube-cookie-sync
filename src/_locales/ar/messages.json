@@ -283,5 +283,29 @@
   },
   "backend_open_failed": {
     "message": "تعذّر فتح صفحة الواجهة الخلفية."
+  },
+  "rplay_detected": {
+    "message": "تم اكتشاف بث RPlay"
+  },
+  "rplay_use": {
+    "message": "استخدام هذا البث"
+  },
+  "rplay_send": {
+    "message": "إرسال البث"
+  },
+  "rplay_sync_cookies": {
+    "message": "مزامنة ملفات تعريف RPlay"
+  },
+  "rplay_plugin_hint": {
+    "message": "موصى به: ثبّت إضافة المستخرج rplay لـ yt-dlp على YTPTube (تمنحك العنوان والوصف والصورة وملف NFO). وإن لم تكن مثبّتة فاستخدم \"استخدام هذا البث\"."
+  },
+  "rplay_drm_warning": {
+    "message": "هذا البث محمي بـ DRM (Widevine) ولا يمكن لـ YTPTube / yt-dlp فك تشفيره."
+  },
+  "background_polling": {
+    "message": "استطلاع الحالة في الخلفية"
+  },
+  "background_polling_help": {
+    "message": "يستمر في فحص النسخة بحثًا عن التنزيلات المكتملة أو الفاشلة وتحديث رقم الشارة."
   }
 }

@@ -81,6 +81,52 @@
 - 未授权的目标会标记为「已跳过」，结果汇总显示在选项页
 - 可选择是否让同步在后台静默进行
 
+## 新增功能：RPlay 真实流嗅探
+
+RPlay 的播放页 `https://rplay.live/play/...` 是 SPA：直接把页面 URL 交给 YTPTube 时，yt-dlp 无法解析（HTML 里的 `canonical` 指向 `localhost`，且真实清单是播放器运行时请求的）。启用本功能后：
+
+- 在 RPlay 页面播放视频时，后台通过 `webRequest` 捕获真正的 HLS/DASH 清单地址（每个标签页保留最先捕获的 master）；
+- 打开扩展弹窗会显示 **RPlay stream detected**，提供：
+  - **使用该流**：把清单地址填入 URL 输入框；
+  - **发送该流**：直接把清单地址发送到 YTPTube；
+  - **同步 RPlay cookies**：把 `rplay.live` 的浏览器 Cookie 同步到所选 Cookie 预设；
+- 若清单被识别为 DRM（Widevine / SAMPLE-AES / `/drm_` 路径），会阻止发送并提示：YTPTube / yt-dlp 无法解密。
+
+**推荐：安装 rplay 提取器插件（可得到标题/简介/封面/NFO）**
+
+把清单地址直接交给 yt-dlp 只会走 generic 提取器，没有标题/日期，`NFOMakerPP` 因缺少上传/发布日期而不会生成 NFO。仓库内 `plugins/yt_dlp_plugins/extractor/rplay.py` 是一个 yt-dlp 提取器插件：扩展发送 RPlay **页面 URL**，并通过 YTPTube 的 `cli` 字段传
+`--extractor-args "rplay:manifest=<编码后的清单>;type=hls"`，插件据此返回完整 `info_dict`（title/description/thumbnail/upload_date，id 取 contentOid → `--download-archive` 去重也稳定）。
+
+YTPTube 插件安装（Docker，`XDG_CONFIG_HOME=/config`，yt-dlp 默认插件目录为 `/config/yt-dlp/plugins/<名>/yt_dlp_plugins/`）：
+
+```bash
+# 在 docker-compose.yml 所在目录执行；把插件的 yt_dlp_plugins 放到 rplay 名下
+mkdir -p ./config/yt-dlp/plugins/rplay
+cp -r plugins/yt_dlp_plugins ./config/yt-dlp/plugins/rplay/
+docker compose restart ytptube
+```
+
+最终路径应为 `./config/yt-dlp/plugins/rplay/yt_dlp_plugins/extractor/rplay.py`。
+
+> 如果未被加载，改放到 `./config/yt-dlp/yt_dlp_plugins/extractor/rplay.py`，并给容器加环境变量
+> `YTP_PYTHON_PATH=/config/yt-dlp`（YTPTube 会把它加入 `sys.path`，yt-dlp 会扫描 PYTHONPATH）。
+>
+> 验证：安装后在 YTPTube 日志或控制台执行
+> `yt-dlp --skip-download --extractor-args "rplay:manifest=<url>;type=hls" "https://rplay.live/play/<id>"`
+> 看到 `[rplay]` 即成功。
+
+**备选（不装插件）**：点「使用该流」把清单地址填入 URL 框再发送，扩展会用 `--parse-metadata` 从页面注入
+`title`/`description`/`upload_date`。该方式不支持封面，且 `--download-archive` 对签名地址去重不稳定。
+
+> 建议创建一个名为 `rplay` 的自定义预设（预设名匹配域名，会自动选中），并加入请求头，例如：
+>
+> ```
+> --add-header "Referer: https://rplay.live/"
+> --add-header "Origin: https://rplay.live"
+> ```
+>
+> 清单地址带签名且会过期，请在捕获后尽快发送。该功能仅适用于未加密内容。
+
 ## 新增功能：下载通知与实时状态
 
 弹窗底部提供**实时下载状态**区域：
@@ -129,14 +175,16 @@
 
 | 文件 | 说明 |
 |------|------|
-| `src/manifest.json` | 版本 1.7.0；添加 `cookies`、`alarms`、`clipboardWrite` 权限、可选主机权限、快捷键命令 |
+| `src/manifest.json` | 版本 1.8.0；添加 `cookies`、`alarms`、`clipboardWrite`、`webRequest` 权限、可选主机权限、rplay 主机权限、快捷键命令 |
 | `src/api.js` | **新增** 共享 YTPTube API 请求模块（地址、认证、超时） |
 | `src/auth.js` | 认证改存 `local` storage，支持从 `sync` 迁移及清除 |
 | `src/cookies.js` | **新增** 按 URL 读取 Cookie、Netscape 格式转换与解析 |
-| `src/background.js` | 通知、实时状态轮询、失败重试、自动同步定时器、快捷键处理 |
+| `src/rplay.js` | **新增** RPlay 清单识别与 DRM 检测（`webRequest` 嗅探与弹窗共用） |
+| `plugins/yt_dlp_plugins/extractor/rplay.py` | **新增** yt-dlp 提取器插件：由页面 URL + `--extractor-args "rplay:manifest=..."` 返回完整元数据与格式 |
+| `src/background.js` | 通知、实时状态轮询、失败重试、自动同步定时器、快捷键处理、RPlay 清单嗅探与 `get-rplay-stream` |
 | `src/history.html` / `src/history.js` | **新增** 历史记录页面 |
-| `src/popup.html` | 添加 Cookie 同步、实时/失败下载、批量添加、历史、跳转后台等 UI |
-| `src/popup.js` | Cookie 同步/复制、实时状态、失败重试、批量添加、按域名自动选择预设 `inferPresetByUrl()` |
+| `src/popup.html` | 添加 Cookie 同步、实时/失败下载、批量添加、历史、跳转后台、RPlay 流区域等 UI |
+| `src/popup.js` | Cookie 同步/复制、实时状态、失败重试、批量添加、按域名自动选择预设 `inferPresetByUrl()`、RPlay 流发送/使用/同步 Cookie |
 | `src/options.html` | 添加通知、自动同步、预设管理区域 |
 | `src/options.js` | 通知/自动同步设置、预设创建删除、Cookie 导入导出、可选权限请求 |
 | `src/css/popup.css` / `src/css/ytp.css` | 新增区域的样式 |

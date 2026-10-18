@@ -3,6 +3,7 @@ if (typeof importScripts === 'function') {
     importScripts('auth.js');
     importScripts('api.js');
     importScripts('cookies.js');
+    importScripts('rplay.js');
 }
 
 const str_keys = ["instance_url", "preset"]
@@ -81,11 +82,15 @@ const sendRequest = async (path, data) => {
     return { status: result.status, statusText: result.statusText, data: result.response };
 };
 
-const sendUrl = async (user_url, preset = null) => {
+const sendUrl = async (user_url, preset = null, extra = {}) => {
     try {
         const requestData = { url: user_url };
         if (preset) {
             requestData.preset = preset;
+        }
+        // YTPTube 支持逐条目的 yt-dlp 参数 / 模板 / 目录（见 API.md POST /api/history）。
+        for (const key of ['cli', 'template', 'folder']) {
+            if (extra && extra[key]) requestData[key] = extra[key];
         }
 
         console.debug('Sending request data:', requestData);
@@ -134,7 +139,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     return;
                 }
 
-                const result = await sendUrl(url, message.preset);
+                const result = await sendUrl(url, message.preset, {
+                    cli: message.cli,
+                    template: message.template,
+                    folder: message.folder,
+                });
                 sendResponse(result);
             } catch (error) {
                 console.error('Error in message handler:', error);
@@ -243,6 +252,107 @@ const syncCookiesToPreset = async (url, presetName, quiet = false) => {
     return { success: false, message: t('cookie_sync_failed', [errorMsg]) };
 };
 
+// ============ RPlay 真实流嗅探 ============
+// RPlay 的播放页是 SPA：直接把这个页面 URL 交给 YTPTube 会被 yt-dlp 拒绝
+// （HTML 里 canonical 指向 localhost，且没有可解析的清单）。这里监听网络请求，
+// 捕获真正的 HLS/DASH 清单地址，再把该地址发送给 YTPTube。
+const rplayStreams = new Map(); // tabId -> { url, type, ts }
+const RPLAY_STREAM_TTL = 10 * 60 * 1000;
+
+if (chrome.webRequest?.onBeforeRequest) {
+    chrome.webRequest.onBeforeRequest.addListener(details => {
+        const { url, tabId } = details;
+        if (!Number.isInteger(tabId) || tabId < 0) return;
+        // 每个标签页只保留最先捕获的清单：master 通常先于媒体列表被请求。
+        if (rplayStreams.has(tabId)) return;
+        const type = YTPRplay.getManifestSourceType(url);
+        if (!type) return;
+        rplayStreams.set(tabId, { url, type, ts: Date.now() });
+    }, { urls: ['*://*.rplay.live/*', '*://*.rplay-cdn.com/*'] });
+
+    chrome.tabs.onRemoved.addListener(tabId => rplayStreams.delete(tabId));
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+        // 刷新/跳转后旧的签名清单即失效。
+        if (changeInfo.url || changeInfo.status === 'loading') rplayStreams.delete(tabId);
+    });
+}
+
+const fetchRplayDrmReason = async url => {
+    // RPlay 用 `/drm_` 路径段标记加密资产。
+    if (YTPRplay.isDrmUrl(url)) return 'drm-path';
+    try {
+        const response = await fetch(url, { credentials: 'include' });
+        if (!response.ok) return null; // 无法读取时按"未知"处理，不阻止发送
+        return YTPRplay.detectDrm(await response.text());
+    } catch {
+        return null;
+    }
+};
+
+const resolveTabId = async tabId => {
+    if (Number.isInteger(tabId)) return tabId;
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tab?.id;
+};
+
+const decodeHtml = value => String(value || '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'");
+
+// 从 RPlay 播放页抓取 OG / JSON-LD 元数据，用于在 YTPTube 侧补全 title 等字段，
+// 否则 generic 提取器只有清单地址，NFOMakerPP 因缺少标题/日期而无法生成 NFO。
+const parseRplayPage = async pageUrl => {
+    try {
+        const response = await fetch(pageUrl, { credentials: 'include' });
+        if (!response.ok) return {};
+        const html = await response.text();
+        const meta = property => {
+            const pattern = new RegExp(`<meta[^>]+(?:property|name)=["']${property}["'][^>]*content=["']([^"']*)`, 'i');
+            const match = pattern.exec(html);
+            return match ? decodeHtml(match[1]) : '';
+        };
+        const jsonString = key => {
+            const match = new RegExp(`"${key}"\\s*:\\s*"([^"]+)"`).exec(html);
+            return match ? match[1] : '';
+        };
+        const rawDate = jsonString('uploadDate') || meta('video:release_date') || meta('article:published_time');
+        return {
+            title: meta('og:title') || decodeHtml((/<title[^>]*>([^<]*)<\/title>/i.exec(html) || [])[1] || ''),
+            description: meta('og:description') || meta('description'),
+            thumbnail: meta('og:image'),
+            uploadDate: /^\d{4}-\d{2}-\d{2}/.test(rawDate) ? rawDate.slice(0, 10).replace(/-/g, '') : '',
+            id: jsonString('identifier'),
+        };
+    } catch (error) {
+        console.debug('RPlay page metadata failed:', error);
+        return {};
+    }
+};
+
+const getRplayStream = async (tabId, pageUrl) => {
+    const id = await resolveTabId(tabId);
+    const entry = id === undefined ? null : rplayStreams.get(id);
+    if (!entry || Date.now() - entry.ts > RPLAY_STREAM_TTL) return { found: false };
+    const [drmReason, metadata] = await Promise.all([
+        fetchRplayDrmReason(entry.url),
+        pageUrl ? parseRplayPage(pageUrl) : Promise.resolve({}),
+    ]);
+    return { found: true, url: entry.url, type: entry.type, drm: Boolean(drmReason), drmReason, metadata };
+};
+
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message.command !== 'get-rplay-stream') return;
+    (async () => {
+        try {
+            sendResponse(await getRplayStream(message.tabId, message.pageUrl));
+        } catch (error) {
+            console.error('Error resolving rplay stream:', error);
+            sendResponse({ found: false, message: error.message });
+        }
+    })();
+    return true;
+});
+
 // ============ 后台实时状态轮询与通知 ============
 const STATUS_ALARM = 'ytp_status_poll';
 const AUTO_SYNC_ALARM = 'ytp_cookie_sync';
@@ -257,12 +367,28 @@ const SUPPRESS_MS = 10 * 60 * 1000;
 
 // alarms 无法低于 0.5 分钟（Chrome 最小值），后台仅做兜底通知；
 // 弹窗打开时由 popup.js 自行刷新（WebSocket 或轮询）。
+const STATUS_POLL_INTERVAL = 0.5;
 const AUTO_SYNC_DEFAULT_INTERVAL = 360;
 const AUTO_SYNC_MIN_INTERVAL = 5;
 
-const ensureStatusAlarm = () => {
-  if (!chrome.alarms) return;
-  chrome.alarms.create(STATUS_ALARM, { periodInMinutes: 0.5 });
+const updateBadge = count => {
+    if (!chrome.action?.setBadgeText) return;
+    chrome.action.setBadgeText({ text: count > 0 ? String(count) : '' });
+    if (count > 0 && chrome.action.setBadgeBackgroundColor) {
+        chrome.action.setBadgeBackgroundColor({ color: '#5965d8' });
+    }
+};
+
+// 后台轮询默认关闭：关闭后不注册 alarm，完全不请求实例。
+const ensureStatusAlarm = async () => {
+    if (!chrome.alarms) return;
+    const { backgroundPolling } = await chrome.storage.sync.get('backgroundPolling');
+    if (backgroundPolling) {
+        chrome.alarms.create(STATUS_ALARM, { periodInMinutes: STATUS_POLL_INTERVAL });
+    } else {
+        await chrome.alarms.clear(STATUS_ALARM);
+        updateBadge(0);
+    }
 };
 
 const ensureAutoSyncAlarm = async () => {
@@ -281,9 +407,10 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // 间隔或开关变化时重建 alarm
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === 'sync' && (changes.autoSyncInterval || changes.autoSyncEnabled)) {
-    ensureAutoSyncAlarm();
-  }
+    if (areaName === 'sync') {
+        if (changes.backgroundPolling) ensureStatusAlarm();
+        if (changes.autoSyncInterval || changes.autoSyncEnabled) ensureAutoSyncAlarm();
+    }
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
@@ -464,20 +591,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   return true;
 });
 
-const updateBadge = count => {
-  if (!chrome.action?.setBadgeText) return;
-  chrome.action.setBadgeText({ text: count > 0 ? String(count) : '' });
-  if (count > 0 && chrome.action.setBadgeBackgroundColor) {
-    chrome.action.setBadgeBackgroundColor({ color: '#5965d8' });
-  }
-};
-
 const pollStatusAndNotify = async () => {
-  const instanceUrl = await getOption('instance_url');
-  if (!instanceUrl) {
-    updateBadge(0);
-    return;
-  }
+    const instanceUrl = await getOption('instance_url');
+    const { backgroundPolling } = await chrome.storage.sync.get('backgroundPolling');
+    if (!instanceUrl || !backgroundPolling) {
+        updateBadge(0);
+        return;
+    }
 
   await loadStatusState();
   await loadSuppressedUrls();

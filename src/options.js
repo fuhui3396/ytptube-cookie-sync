@@ -282,7 +282,7 @@ document.getElementById("toggle_auth").addEventListener("click", e => {
 });
 
 // ==================== Notification settings ====================
-const NOTIFY_DEFAULTS = { notifyEnabled: true, notifyFinished: true, notifyFailed: true };
+const NOTIFY_DEFAULTS = { notifyEnabled: true, notifyFinished: true, notifyFailed: true, backgroundPolling: false };
 
 const initNotifications = async () => {
     const stored = await chrome.storage.sync.get(Object.keys(NOTIFY_DEFAULTS));

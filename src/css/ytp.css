@@ -127,7 +127,7 @@ select.ytp-control { appearance: none; padding-inline-end: 30px; }
 .ytp-range-field input { width: 100%; accent-color: var(--ytp-primary); }
 .ytp-range-field small { color: var(--ytp-muted); font-size: 12px; }
 
-.ytp-actions { display: flex; gap: 8px; }
+.ytp-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .ytp-button {
     min-height: 36px;
     padding: 7px 13px;

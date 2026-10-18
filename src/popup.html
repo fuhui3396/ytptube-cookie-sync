@@ -39,6 +39,17 @@
             <input id="user_url" class="ytp-control" type="text" data-i18n-placeholder="url_placeholder" placeholder="https://..">
             <span class="ytp-help" data-i18n="url_help">The URL to add to your download queue.</span>
         </div>
+        <section id="rplay-section" class="ytp-section is-hidden">
+            <h2 class="ytp-subheading" data-i18n="rplay_detected">RPlay stream detected</h2>
+            <p id="rplay-info" class="ytp-help"></p>
+            <p class="ytp-help" data-i18n="rplay_plugin_hint">Recommended: install the yt-dlp rplay extractor plugin on YTPTube. Without it, use "Use this stream".</p>
+            <div class="ytp-actions">
+                <button id="rplay-use-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="rplay_use">Use this stream</button>
+                <button id="rplay-send-btn" class="ytp-button ytp-button-primary" type="button" data-i18n="rplay_send">Send stream</button>
+                <button id="rplay-sync-cookies-btn" class="ytp-button ytp-button-secondary" type="button" data-i18n="rplay_sync_cookies">Sync RPlay cookies</button>
+            </div>
+            <div id="rplay-status" class="ytp-status is-hidden" role="status"></div>
+        </section>
         <details class="ytp-batch">
             <summary data-i18n="batch_add">Batch add</summary>
             <textarea id="batch-urls" class="ytp-control" rows="4" data-i18n-placeholder="batch_placeholder" placeholder="One URL per line"></textarea>
@@ -103,6 +114,7 @@
   <script src="auth.js"></script>
   <script src="api.js"></script>
   <script src="cookies.js"></script>
+  <script src="rplay.js"></script>
   <script src="fanart.js"></script>
   <script src="popup.js"></script>
 

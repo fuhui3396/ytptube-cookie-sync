@@ -12,7 +12,7 @@
   },
   "name": "__MSG_extension_name__",
   "default_locale": "en",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "__MSG_extension_description__",
   "permissions": [
     "activeTab",
@@ -21,11 +21,16 @@
     "notifications",
     "cookies",
     "alarms",
-    "clipboardWrite"
+    "clipboardWrite",
+    "webRequest"
   ],
   "optional_host_permissions": [
     "http://*/*",
     "https://*/*"
+  ],
+  "host_permissions": [
+    "*://*.rplay.live/*",
+    "*://*.rplay-cdn.com/*"
   ],
   "commands": {
     "send-current-tab": {

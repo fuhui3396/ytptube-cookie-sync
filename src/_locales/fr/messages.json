@@ -283,5 +283,29 @@
   },
   "backend_open_failed": {
     "message": "Impossible d'ouvrir la page du backend."
+  },
+  "rplay_detected": {
+    "message": "Flux RPlay détecté"
+  },
+  "rplay_use": {
+    "message": "Utiliser ce flux"
+  },
+  "rplay_send": {
+    "message": "Envoyer le flux"
+  },
+  "rplay_sync_cookies": {
+    "message": "Synchroniser les cookies RPlay"
+  },
+  "rplay_plugin_hint": {
+    "message": "Recommandé : installez le plugin extracteur rplay pour yt-dlp sur YTPTube (titre, synopsis, miniature et NFO). Sinon, utilisez « Utiliser ce flux »."
+  },
+  "rplay_drm_warning": {
+    "message": "Ce flux est protégé par DRM (Widevine) ; YTPTube / yt-dlp ne peut pas le déchiffrer."
+  },
+  "background_polling": {
+    "message": "Sonder l’état en arrière-plan"
+  },
+  "background_polling_help": {
+    "message": "Vérifie en continu l’instance pour les téléchargements terminés ou échoués et met à jour le compteur du badge."
   }
 }

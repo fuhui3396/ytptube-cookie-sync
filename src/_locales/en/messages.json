@@ -434,6 +434,12 @@
   "notify_failed": {
     "message": "Notify when a download fails"
   },
+  "background_polling": {
+    "message": "Poll status in the background"
+  },
+  "background_polling_help": {
+    "message": "Keeps checking the instance for finished or failed downloads and updating the badge count."
+  },
   "auto_sync_section": {
     "message": "Automatic cookie sync"
   },
@@ -499,5 +505,23 @@
   },
   "cookies": {
     "message": "Cookies"
+  },
+  "rplay_detected": {
+    "message": "RPlay stream detected"
+  },
+  "rplay_use": {
+    "message": "Use this stream"
+  },
+  "rplay_send": {
+    "message": "Send stream"
+  },
+  "rplay_sync_cookies": {
+    "message": "Sync RPlay cookies"
+  },
+  "rplay_plugin_hint": {
+    "message": "Recommended: install the yt-dlp rplay extractor plugin on YTPTube (gives title, plot, thumbnail and NFO). Without it, use \"Use this stream\"."
+  },
+  "rplay_drm_warning": {
+    "message": "This stream is DRM-protected (Widevine); YTPTube / yt-dlp cannot decrypt it."
   }
 }

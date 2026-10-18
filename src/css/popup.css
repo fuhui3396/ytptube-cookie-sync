@@ -55,6 +55,13 @@ html {
     overflow-x: auto;
 }
 
+#rplay-info {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    max-height: 5.6em;
+    overflow-y: auto;
+}
+
 .ytp-download-status {
     margin-top: 16px;
     border-top: 1px solid var(--ytp-border-soft);

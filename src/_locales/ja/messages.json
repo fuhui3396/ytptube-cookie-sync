@@ -283,5 +283,29 @@
   },
   "backend_open_failed": {
     "message": "バックエンドページを開けませんでした。"
+  },
+  "rplay_detected": {
+    "message": "RPlay の配信ストリームを検出しました"
+  },
+  "rplay_use": {
+    "message": "このストリームを使う"
+  },
+  "rplay_send": {
+    "message": "ストリームを送信"
+  },
+  "rplay_sync_cookies": {
+    "message": "RPlay の Cookie を同期"
+  },
+  "rplay_plugin_hint": {
+    "message": "推奨：YTPTube に yt-dlp の rplay 抽出プラグインを入れてください（タイトル・あらすじ・サムネイル・NFO が得られます）。未導入の場合は「このストリームを使う」を使用してください。"
+  },
+  "rplay_drm_warning": {
+    "message": "このストリームは DRM（Widevine）で保護されており、YTPTube / yt-dlp では復号できません。"
+  },
+  "background_polling": {
+    "message": "バックグラウンドで状態をポーリング"
+  },
+  "background_polling_help": {
+    "message": "ダウンロードの完了や失敗を監視し、バッジの数を更新します。"
   }
 }
